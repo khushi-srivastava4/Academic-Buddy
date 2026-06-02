@@ -13,3 +13,5 @@ PyMuPDF
 python-pptx
 streamlit
 httpx
+sentence-transformers>=3.0.0
+torch
