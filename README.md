@@ -36,7 +36,7 @@ Students often have hundreds of pages of lecture notes and previous-year questio
 
 ## 🖥️ Application Preview
 
-> Add screenshots of the application inside the `docs/` directory and update the paths below.
+> Screenshots
 
 ### 💬 Lecture Notes Chat
 
