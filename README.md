@@ -1,349 +1,952 @@
-# Academic-Buddy
-Academic Buddy — AI-Powered Learning Assistant
-Problem Statement
+# 🎓 Academic Buddy
 
-Students often have hundreds of pages of lecture notes and previous-year question papers (PYQs), but finding relevant information, identifying important topics, and preparing efficiently for exams is difficult.
+### AI-Powered Learning Assistant for Smarter Exam Preparation
 
-To solve this, I built Academic Buddy, an AI-powered academic assistant that transforms course materials into an interactive learning system capable of answering questions, generating quizzes, analyzing PYQs, and creating personalized revision plans.
+> **Academic Buddy** is a full-stack AI-powered learning platform that transforms lecture notes and previous-year question papers (PYQs) into an interactive academic assistant for **question answering, quiz generation, answer evaluation, exam analytics, and personalized revision planning**.
 
-System Architecture
+---
 
-The project follows a full-stack AI architecture consisting of:
+## 🚀 Overview
 
-Frontend
-React.js
-Context API for global state management
-Axios for API communication
-React Router for navigation
-Backend
-FastAPI
-REST APIs
-Pydantic validation
-Async request handling
-Storage Layer
-ChromaDB (Vector Database)
-SQLite (Structured Analytics Database)
-AI Layer
-Gemini API
-Groq API (Fallback)
-Retrieval-Augmented Generation (RAG)
-Feature 1: Lecture Notes Chat (RAG System)
+Students often have hundreds of pages of lecture notes and previous-year question papers, making it difficult to:
 
-This is the core feature.
+* Find relevant information quickly
+* Identify important and frequently repeated topics
+* Understand which topics carry higher marks
+* Practice questions effectively
+* Track learning performance
+* Plan revision efficiently before examinations
 
-Workflow
-Step 1: Upload Lecture Notes
+**Academic Buddy** addresses these problems by combining **Retrieval-Augmented Generation (RAG), semantic search, LLMs, vector databases, structured analytics, and personalized recommendations** into a single platform.
 
-Students upload PDFs/PPTs.
+### ✨ Key Capabilities
 
-The system:
+| Feature                   | Description                                                              |
+| ------------------------- | ------------------------------------------------------------------------ |
+| 📚 **Lecture Notes Chat** | Ask questions directly from uploaded lecture material using RAG          |
+| 📝 **Quiz Generation**    | Generate MCQs, short-answer, and numerical questions                     |
+| 🎯 **Answer Evaluation**  | Evaluate student answers using an LLM-as-a-Judge approach                |
+| 🧠 **PYQ Intelligence**   | Extract and analyze structured information from previous-year papers     |
+| 📊 **Exam Analytics**     | Identify topic frequency, marks distribution, and repeated topics        |
+| 🗓️ **Revision Planner**  | Generate personalized study priorities and daily revision plans          |
+| 📈 **User Analytics**     | Track quiz performance, accuracy, topics attempted, and learning history |
+| 🔄 **LLM Failover**       | Automatically switch from Gemini to Groq when the primary model fails    |
 
-PDF
- ↓
+---
+
+## 🖥️ Application Preview
+
+> Add screenshots of the application inside the `docs/` directory and update the paths below.
+
+### 💬 Lecture Notes Chat
+
+![Lecture Chat](./docs/lecture-chat.png)
+
+### 📊 PYQ Analytics
+
+![PYQ Analytics](./docs/pyq-analytics.png)
+
+### 📝 Quiz Generation
+
+![Quiz Generation](./docs/quiz.png)
+
+### 🗓️ Personalized Revision
+
+![Revision Planner](./docs/revision.png)
+
+---
+
+# 🏗️ System Architecture
+
+Academic Buddy follows a **full-stack AI architecture** consisting of four major layers:
+
+```text
+┌──────────────────────────────────────────────────────┐
+│                    React Frontend                    │
+│       Context API • Axios • React Router             │
+└──────────────────────────┬───────────────────────────┘
+                           │
+                           ▼
+┌──────────────────────────────────────────────────────┐
+│                   FastAPI Backend                     │
+│        REST APIs • Pydantic • Async Requests         │
+└───────────────┬───────────────────┬───────────────────┘
+                │                   │
+                ▼                   ▼
+      ┌─────────────────┐   ┌─────────────────┐
+      │   AI / RAG      │   │  Data Storage   │
+      │                 │   │                 │
+      │ Gemini          │   │ ChromaDB        │
+      │ Groq            │   │ SQLite          │
+      │ Embeddings      │   │                 │
+      │ Semantic Search │   │                 │
+      └────────┬────────┘   └────────┬────────┘
+               │                     │
+               └──────────┬──────────┘
+                          ▼
+                  Academic Response
+```
+
+## 🧩 Architecture Components
+
+### Frontend
+
+* React.js
+* Context API for global state management
+* Axios for API communication
+* React Router for navigation
+
+### Backend
+
+* FastAPI
+* RESTful APIs
+* Pydantic validation
+* Asynchronous request handling
+* Modular router/service architecture
+
+### Storage
+
+* **ChromaDB** — vector storage and semantic retrieval
+* **SQLite** — structured PYQ and user analytics
+
+### AI Layer
+
+* Gemini API
+* Groq API as fallback
+* Retrieval-Augmented Generation
+* Vector embeddings
+* Semantic similarity search
+* Prompt engineering
+
+---
+
+# 📚 Feature 1 — Lecture Notes Chat
+
+The Lecture Notes Chat is the core feature of Academic Buddy.
+
+It uses a **Retrieval-Augmented Generation (RAG)** pipeline to answer questions using the student's uploaded academic material instead of relying solely on the LLM's internal knowledge.
+
+## 🔄 RAG Pipeline
+
+```text
+                Upload Lecture Material
+                         │
+                         ▼
+                PDF / PPT Processing
+                         │
+                         ▼
+                  Text Extraction
+                         │
+                         ▼
+                    Chunking
+                         │
+                         ▼
+                Embedding Generation
+                         │
+                         ▼
+                     ChromaDB
+                         │
+                         │
+                  User asks a question
+                         │
+                         ▼
+                  Query Embedding
+                         │
+                         ▼
+                 Similarity Search
+                         │
+                         ▼
+                Top-K Chunks Retrieved
+                         │
+                         ▼
+                 Prompt Construction
+                         │
+                         ▼
+                    Gemini
+                         │
+                    Failure?
+                      /   \
+                    No     Yes
+                    │       │
+                    ▼       ▼
+                 Answer   Groq
+                    │       │
+                    └───┬───┘
+                        ▼
+               Answer + Citations
+```
+
+## 1️⃣ Upload Lecture Notes
+
+Students can upload academic material such as:
+
+* Lecture PDFs
+* PPTs
+* Course notes
+
+The documents are processed before being stored in the vector database.
+
+```text
+PDF / PPT
+   ↓
 Text Extraction
- ↓
-Chunking
- ↓
+   ↓
+Document Chunking
+   ↓
 Embedding Generation
- ↓
-ChromaDB Storage
-Step 2: Chunking
+   ↓
+ChromaDB
+```
 
-Instead of sending an entire 100-page PDF to the LLM:
+## 2️⃣ Document Chunking
 
-Documents are divided into chunks
-Chunk size ≈ 1500 characters
-Overlap ≈ 200 characters
+Instead of sending an entire 100-page document to an LLM, the document is divided into smaller chunks.
 
-This preserves context while improving retrieval accuracy.
+| Parameter     |    Configuration |
+| ------------- | ---------------: |
+| Chunk Size    | ~1500 characters |
+| Chunk Overlap |  ~200 characters |
 
-Step 3: Embedding Generation
+Chunk overlap helps preserve contextual continuity between adjacent sections.
 
-Each chunk is converted into a dense vector representation using embedding models.
+### Example
 
-Example:
+```text
+Original Document
+       │
+       ├── Chunk 1
+       ├── Chunk 2
+       ├── Chunk 3
+       ├── ...
+       └── Chunk N
+```
 
+## 3️⃣ Embedding Generation
+
+Each document chunk is converted into a dense vector representation.
+
+For example:
+
+```text
 "Fick's First Law"
-↓
+        ↓
 [0.12, -0.45, 0.89, ...]
+```
 
-These embeddings capture semantic meaning rather than keywords.
+The resulting embeddings represent the semantic meaning of the text, allowing the system to retrieve conceptually relevant content rather than relying only on exact keyword matches.
 
-Step 4: Vector Storage
+## 4️⃣ Vector Storage
 
-Embeddings are stored in ChromaDB.
+The generated embeddings are stored in **ChromaDB**.
 
-Each chunk stores:
+Each stored chunk contains metadata such as:
 
-Text
-Page Number
-Source File
-Chunk Index
-Embedding Vector
-Step 5: Question Answering
+* Text
+* Page number
+* Source file
+* Chunk index
+* Embedding vector
 
-When a user asks:
+## 5️⃣ Question Answering
 
-"What is Fick's First Law?"
+Suppose a student asks:
 
-The system:
+> **"What is Fick's First Law?"**
 
-Query
- ↓
-Embedding
- ↓
-Similarity Search
- ↓
-Top-K Chunks Retrieved
- ↓
-Prompt Construction
- ↓
-Gemini/Groq
- ↓
-Answer
-Step 6: Citation-Based Response
+The system performs:
 
-The generated answer includes:
+```text
+User Query
+    ↓
+Query Embedding
+    ↓
+Semantic Similarity Search
+    ↓
+Top-K Relevant Chunks
+    ↓
+Context Construction
+    ↓
+LLM Prompt
+    ↓
+Gemini / Groq
+    ↓
+Final Answer
+```
 
-Source File
-Page Number
+Only the most relevant retrieved content is provided as context to the model.
 
-This improves trust and reduces hallucinations.
+## 6️⃣ Source-Based Responses
 
-Feature 2: Quiz Generation
+The generated response includes source information such as:
 
-Students can generate quizzes from uploaded material.
+* Source file
+* Page number
 
-Pipeline
-Topic
- ↓
+This makes responses more traceable and helps reduce unsupported or hallucinated answers.
+
+---
+
+# 📝 Feature 2 — Quiz Generation
+
+Academic Buddy can automatically generate quizzes from uploaded academic material.
+
+## 🔄 Quiz Pipeline
+
+```text
+Selected Topic
+      ↓
 Retrieve Relevant Chunks
- ↓
+      ↓
+Construct Context
+      ↓
 Prompt LLM
- ↓
+      ↓
 Generate Questions
+      ↓
+Quiz Presented to Student
+```
 
-Supports:
+### Supported Question Types
 
-MCQ
-Short Answer
-Numerical Questions
+* Multiple Choice Questions
+* Short Answer Questions
+* Numerical Questions
 
-Difficulty Levels:
+### Difficulty Levels
 
-Easy
-Medium
-Hard
+* 🟢 Easy
+* 🟡 Medium
+* 🔴 Hard
 
-Users can generate multiple questions per topic.
+Students can also generate multiple questions for a selected topic.
 
-Feature 3: Answer Evaluation
+---
 
-Implemented an LLM-as-a-Judge architecture.
+# 🎯 Feature 3 — Answer Evaluation
 
-Process
+Academic Buddy implements an **LLM-as-a-Judge** architecture for evaluating student answers.
 
-Input:
+## Evaluation Process
 
+The evaluator receives:
+
+```text
 Question
+   +
 Model Answer
+   +
 Student Answer
-Marks
+   +
+Maximum Marks
+```
 
-The LLM:
+The LLM then:
 
-Compares concepts
-Checks correctness
-Awards marks
-Generates feedback
+1. Compares the student's answer with the expected answer
+2. Checks conceptual correctness
+3. Identifies missing concepts or assumptions
+4. Assigns marks
+5. Generates feedback
 
-Output:
+### Example
 
-{
- "score":4,
- "feedback":"Good explanation but missing assumptions."
-}
-Feature 4: PYQ Intelligence Engine
+**Input**
 
-One of the most unique parts.
-
-Upload PYQ Papers
-
-Students upload:
-
-Midsem Papers
-Endsem Papers
-Quiz Papers
-Question Extraction
-
-The LLM extracts structured information:
-
-Topic
-Subtopic
-Marks
-Difficulty
-Question Type
-Year
-
-Example:
-
+```text
 Question:
+Explain Fick's First Law.
+
+Maximum Marks:
+5
+
+Student Answer:
+...
+```
+
+**Output**
+
+```json
+{
+  "score": 4,
+  "feedback": "Good explanation but missing assumptions."
+}
+```
+
+This provides students with immediate feedback rather than only a numerical score.
+
+---
+
+# 🧠 Feature 4 — PYQ Intelligence Engine
+
+The **PYQ Intelligence Engine** converts unstructured previous-year examination papers into structured exam intelligence.
+
+This allows the system to identify what topics are repeatedly asked and how marks are distributed across a course.
+
+## 📄 Upload PYQs
+
+Students can upload:
+
+* Midsem papers
+* Endsem papers
+* Quiz papers
+* Previous examination papers
+
+## 🔄 Question Processing Pipeline
+
+```text
+PYQ Paper
+    ↓
+Question Extraction
+    ↓
+LLM-based Metadata Extraction
+    ↓
+Structured Question Records
+    ↓
+SQLite
+    ↓
+Exam Analytics
+```
+
+## 🏷️ Extracted Metadata
+
+For every question, the system extracts structured information such as:
+
+| Field         | Example          |
+| ------------- | ---------------- |
+| Topic         | Diffusion        |
+| Subtopic      | Fick's First Law |
+| Marks         | 5                |
+| Question Type | Theory           |
+| Difficulty    | Easy             |
+| Year          | 2022             |
+
+### Example
+
+**Original Question**
+
+```text
 Explain Fick's First Law. [5]
+```
 
-Stored As:
+**Structured Record**
 
-Topic: Diffusion
-Marks: 5
-Type: Theory
-Difficulty: Easy
-Year: 2022
-Storage
+```text
+Topic       → Diffusion
+Subtopic    → Fick's First Law
+Marks       → 5
+Type        → Theory
+Difficulty  → Easy
+Year        → 2022
+```
 
-Stored in SQLite.
+---
 
-Over time, this creates a structured exam database.
+# 📊 PYQ Analytics
 
-Analytics Generated
+Once questions from multiple papers are stored, Academic Buddy can generate meaningful exam-level analytics.
 
-The system computes:
+### Analytics Generated
 
-Topic Frequency
-Diffusion → 15 times
-Phase Diagram → 12 times
-Heat Treatment → 9 times
-Marks Distribution
-Average Marks per Topic
-Exam Trends
-Frequently Repeated Topics
-High Weightage Areas
-Emerging Topics
-Feature 5: Personalized Revision Planner
+* Topic frequency
+* Marks distribution
+* Average marks per topic
+* Frequently repeated topics
+* High-weightage topics
+* Exam trends
+* Emerging topics
 
-Uses:
+### Example
 
-Uploaded Notes
+| Topic          | Frequency |
+| -------------- | --------: |
+| Diffusion      |        15 |
+| Phase Diagram  |        12 |
+| Heat Treatment |         9 |
+
+This transforms a collection of PDFs into a structured database of exam patterns.
+
+---
+
+# 🗓️ Feature 5 — Personalized Revision Planner
+
+Academic Buddy combines academic content, exam trends, and student progress to generate personalized revision recommendations.
+
+The planner considers:
+
+```text
+Uploaded Lecture Notes
+        +
 PYQ Statistics
-Days Left for Exam
+        +
+Student Performance
+        +
+Days Remaining
+        ↓
+Priority Calculation
+        ↓
+Personalized Revision Plan
+```
 
-to generate:
+## 📌 Priority Factors
 
-Priority Topics
-High Weightage
-High Frequency
-Weak Areas
-Daily Study Plan
+Topics can be prioritized based on:
 
-Example:
+* High PYQ frequency
+* High marks weightage
+* Weak student performance
+* Exam relevance
 
+### Example Plan
+
+```text
 Day 1 → Diffusion
 Day 2 → Phase Diagram
 Day 3 → Heat Treatment
-Feature 6: User Analytics
+Day 4 → Revision + Practice
+```
 
-Tracks:
+---
 
-Quiz History
-Scores
-Topics Attempted
-Accuracy
-Chat History
-Questions Asked
-Topics Covered
-Recommendations
+# 📈 Feature 6 — User Analytics
 
-Uses performance history to suggest:
+Academic Buddy tracks learning activity to provide personalized recommendations.
 
-Topics to Revise
+### Tracked Data
+
+#### Quiz Performance
+
+* Quiz history
+* Scores
+* Accuracy
+* Topics attempted
+
+#### Learning Activity
+
+* Chat history
+* Questions asked
+* Topics covered
+
+### Recommendations
+
+The collected information can be used to identify:
+
+```text
 Weak Areas
-Engineering Challenges Solved
-1. Hallucination Reduction
+     ↓
+Topics to Revise
+     ↓
+Recommended Practice
+     ↓
+Improved Preparation
+```
 
-Used:
+---
 
-RAG
-Source Citations
-Strict Prompting
+# ⚙️ Engineering Challenges & Solutions
 
-instead of relying on LLM memory.
+## 1. Reducing LLM Hallucinations
 
-2. LLM Quota Failures
+A major challenge with LLM-based academic systems is generating answers that are not grounded in the student's study material.
 
-Implemented:
+### Solution
 
-Gemini
-   ↓
-Automatic Fallback
-   ↓
-Groq
+Academic Buddy uses:
 
-for reliability.
+* Retrieval-Augmented Generation
+* Semantic retrieval
+* Source citations
+* Context-aware prompting
+* Strict response instructions
 
-3. Hybrid Storage Design
+```text
+Student Question
+       ↓
+Retrieve Relevant Material
+       ↓
+Provide Retrieved Context
+       ↓
+Generate Grounded Answer
+       ↓
+Attach Source Citation
+```
 
-Used:
+This reduces dependence on the model's parametric knowledge.
 
+---
+
+## 2. LLM Quota & Availability Failures
+
+External LLM APIs can encounter quota limits, temporary failures, or availability issues.
+
+To improve reliability, Academic Buddy implements a fallback strategy:
+
+```text
+                User Request
+                     │
+                     ▼
+                Gemini API
+                     │
+             ┌───────┴───────┐
+             │               │
+          Success          Failure
+             │               │
+             ▼               ▼
+          Response         Groq API
+                             │
+                             ▼
+                          Response
+```
+
+This provides an alternative model path when the primary provider cannot process the request.
+
+---
+
+## 3. Hybrid Storage Architecture
+
+Different parts of the application require different types of storage.
+
+### ChromaDB
+
+Used for:
+
+* Embedding storage
+* Semantic similarity search
+* Retrieval of relevant document chunks
+
+### SQLite
+
+Used for:
+
+* PYQ metadata
+* Question records
+* Marks
+* Years
+* Topic analytics
+* User performance data
+
+| Storage  | Primary Purpose           |
+| -------- | ------------------------- |
+| ChromaDB | Semantic/vector retrieval |
+| SQLite   | Structured analytics      |
+
+This separation allows each database to handle the workload it is designed for.
+
+---
+
+# 📈 Processing Scale
+
+The system is designed to process:
+
+* Lecture PDFs
+* PPTs
+* PYQ papers
+* Multiple questions across examination papers
+
+### Example: 100-Page Lecture PDF
+
+```text
+100-page PDF
+      ↓
+Text Extraction
+      ↓
+~300 Chunks
+      ↓
+~300 Embeddings
+      ↓
 ChromaDB
+```
 
-for semantic retrieval
+The chunk-based architecture allows large academic documents to be processed without passing the entire document to the LLM for every query.
 
-and
+---
 
-SQLite
+# 🔌 REST API
 
-for structured analytics.
+The backend exposes **15+ REST APIs** covering the major application workflows.
 
-This separation improved efficiency.
+### API Categories
 
-Scale of Processing
+| Category           | Operations                            |
+| ------------------ | ------------------------------------- |
+| 📚 Lecture         | Upload, retrieval, academic chat      |
+| 📝 Quiz            | Generate quiz, evaluate answers       |
+| 📄 PYQ             | Upload and process question papers    |
+| 📊 Analytics       | Topic and exam analytics              |
+| 🗓️ Revision       | Generate revision plans               |
+| 👤 Profile         | User profile management               |
+| 🎯 Recommendations | Personalized academic recommendations |
 
-Current System Handles:
+### Major Endpoints
 
-Documents
-Lecture PDFs
-PPTs
-PYQ Papers
-Processing Pipeline
+```text
+/api/v1/upload/lecture
+/api/v1/chat
 
-For a 100-page PDF:
+/api/v1/pyq/upload
+/api/v1/pyq/ask
+/api/v1/pyq/report
+/api/v1/pyq/analytics
 
-100 pages
-↓
-~300 chunks
-↓
-300 embeddings
-↓
-Stored in ChromaDB
-APIs Developed
+/api/v1/quiz/generate
+/api/v1/quiz/check
 
-Around 15+ REST APIs, including:
+/api/v1/revision/...
+```
 
-Upload
-Chat
-Quiz Generation
-Answer Checking
-PYQ Analytics
-Revision Planning
-Profile Management
-Recommendations
-Technologies Used
-Frontend
-React.js
-Context API
-Axios
-React Router
-Backend
-FastAPI
-Pydantic
-Databases
-ChromaDB
-SQLite
-AI/ML
-RAG
-Vector Embeddings
-Semantic Search
-Gemini API
-Groq API
-Others
-PDF Parsing
-Prompt Engineering
-REST APIs
+The API layer separates frontend interaction from business logic and AI processing.
+
+---
+
+# 🛠️ Technology Stack
+
+## Frontend
+
+| Technology   | Purpose                 |
+| ------------ | ----------------------- |
+| React.js     | User interface          |
+| Context API  | Global state management |
+| Axios        | API communication       |
+| React Router | Client-side navigation  |
+
+## Backend
+
+| Technology       | Purpose                       |
+| ---------------- | ----------------------------- |
+| FastAPI          | Backend framework             |
+| Pydantic         | Data validation               |
+| REST APIs        | Client-server communication   |
+| Async Processing | Non-blocking request handling |
+
+## Databases
+
+| Technology | Purpose                                   |
+| ---------- | ----------------------------------------- |
+| ChromaDB   | Vector database and semantic retrieval    |
+| SQLite     | Structured application and analytics data |
+
+## AI / ML
+
+| Technology      | Purpose                              |
+| --------------- | ------------------------------------ |
+| RAG             | Grounded question answering          |
+| Embeddings      | Semantic representation of documents |
+| Semantic Search | Relevant context retrieval           |
+| Gemini API      | Primary LLM                          |
+| Groq API        | Fallback LLM                         |
+| LLM-as-a-Judge  | Answer evaluation                    |
+
+## Other
+
+* PDF/PPT parsing
+* Prompt engineering
+* Metadata extraction
+* REST API design
+* Structured data processing
+
+---
+
+# 📂 Project Structure
+
+> Update this section to exactly match your repository structure if your folders differ.
+
+```text
+Academic-Buddy/
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── context/
+│   │   └── ...
+│   ├── package.json
+│   └── ...
+│
+├── backend/
+│   ├── routers/
+│   ├── services/
+│   ├── models/
+│   ├── schemas/
+│   ├── ...
+│   ├── requirements.txt
+│   └── ...
+│
+├── docs/
+│   ├── architecture.png
+│   ├── lecture-chat.png
+│   ├── quiz.png
+│   ├── pyq-analytics.png
+│   └── revision.png
+│
+└── README.md
+```
+
+---
+
+# 🚀 Getting Started
+
+## Prerequisites
+
+Make sure the following are installed:
+
+* Python 3.x
+* Node.js
+* npm
+* Gemini API key
+* Groq API key
+
+---
+
+## 1. Clone the Repository
+
+```bash
+git clone <YOUR_GITHUB_REPOSITORY_URL>
+cd Academic-Buddy
+```
+
+---
+
+## 2. Backend Setup
+
+```bash
+cd backend
+pip install -r requirements.txt
+```
+
+Create a `.env` file inside the backend directory:
+
+```env
+GEMINI_API_KEY=your_gemini_api_key
+GROQ_API_KEY=your_groq_api_key
+```
+
+Start the FastAPI server:
+
+```bash
+uvicorn main:app --reload
+```
+
+The backend will be available at:
+
+```text
+http://127.0.0.1:8000
+```
+
+FastAPI's interactive API documentation can be accessed through:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+---
+
+## 3. Frontend Setup
+
+Open another terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The frontend will then be available at the local development address provided by Vite.
+
+---
+
+# 🔐 Environment Variables
+
+The application requires API credentials for the LLM providers.
+
+```env
+GEMINI_API_KEY=your_key_here
+GROQ_API_KEY=your_key_here
+```
+
+> **Never commit API keys or `.env` files to GitHub.**
+
+Add the following to `.gitignore`:
+
+```text
+.env
+__pycache__/
+node_modules/
+*.db
+```
+
+---
+
+# 🔮 Future Improvements
+
+Potential extensions to Academic Buddy include:
+
+* [ ] Multilingual academic support
+* [ ] Improved personalized recommendation models
+* [ ] Automated exam timetable integration
+* [ ] More advanced learning analytics
+* [ ] Streaming LLM responses
+* [ ] Improved question difficulty classification
+* [ ] More advanced adaptive learning strategies
+* [ ] Deployment with scalable cloud infrastructure
+
+---
+
+# 💡 Why Academic Buddy?
+
+Academic Buddy is designed around a simple idea:
+
+```text
+              Academic Material
+                     ↓
+              ┌─────────────┐
+              │ Academic    │
+              │   Buddy     │
+              └──────┬──────┘
+                     ↓
+       ┌─────────────┼─────────────┐
+       ↓             ↓             ↓
+    Understand     Practice      Analyze
+       ↓             ↓             ↓
+      RAG          Quizzes        PYQs
+       │             │             │
+       └─────────────┼─────────────┘
+                     ↓
+              Personalized
+                 Revision
+```
+
+Instead of treating lecture notes, PYQs, quizzes, and student performance as separate resources, the system connects them into a single learning workflow.
+
+---
+
+# 📌 Key Highlights
+
+* 🚀 Full-stack **React + FastAPI** application
+* 🧠 **RAG-powered** academic question answering
+* 🔎 Semantic search using **vector embeddings**
+* 📚 Lecture PDF/PPT processing
+* 📝 AI-generated quizzes
+* 🎯 **LLM-as-a-Judge** answer evaluation
+* 🧠 Automated **PYQ metadata extraction**
+* 📊 Exam trend and topic analytics
+* 🗓️ Personalized revision planning
+* 🔄 Gemini → Groq LLM failover
+* 🗄️ Hybrid **ChromaDB + SQLite** architecture
+* 🔌 **15+ REST APIs**
+
+---
+
+# 👩‍💻 Author
+
+### Khushi Srivastava
+
+**IIT Kharagpur**
+
+Interested in:
+
+`Software Engineering` • `Machine Learning` • `Generative AI` • `Data Science`
+
+---
+
+## ⭐ If you found this project interesting
+
+Feel free to explore the repository, try the application, or use the architecture as inspiration for building AI-powered educational systems.
