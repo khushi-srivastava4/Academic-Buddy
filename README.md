@@ -39,8 +39,9 @@ Students often have hundreds of pages of lecture notes and previous-year questio
 > Screenshots
 
 ### 💬 Lecture Notes Chat
+<img width="1897" height="885" alt="image" src="https://github.com/user-attachments/assets/f8057200-996d-48d4-a1cc-6208be2d7dc7" />
 
-![Lecture Chat](./docs/lecture-chat.png)
+
 
 ### 📊 PYQ Analytics
 
