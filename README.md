@@ -37,6 +37,8 @@ Students often have hundreds of pages of lecture notes and previous-year questio
 ## 🖥️ Application Preview
 
 > Screenshots
+### 🎓 Dashboard
+<img width="1891" height="878" alt="image" src="https://github.com/user-attachments/assets/40bedf07-6b0f-4774-be8e-25cc3b53a8d2" />
 
 ### 💬 Lecture Notes Chat
 <img width="1896" height="875" alt="image" src="https://github.com/user-attachments/assets/be2d0ae5-752c-4122-b2c8-696a7c8d24ad" />
