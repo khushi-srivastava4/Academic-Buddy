@@ -39,21 +39,23 @@ Students often have hundreds of pages of lecture notes and previous-year questio
 > Screenshots
 
 ### 💬 Lecture Notes Chat
-<img width="1897" height="885" alt="image" src="https://github.com/user-attachments/assets/f8057200-996d-48d4-a1cc-6208be2d7dc7" />
+<img width="1896" height="875" alt="image" src="https://github.com/user-attachments/assets/be2d0ae5-752c-4122-b2c8-696a7c8d24ad" />
 
 
 
 ### 📊 PYQ Analytics
+<img width="1879" height="873" alt="image" src="https://github.com/user-attachments/assets/44fe503c-36ff-4e8d-9879-fb23357deb28" />
 
-![PYQ Analytics](./docs/pyq-analytics.png)
 
 ### 📝 Quiz Generation
 
-![Quiz Generation](./docs/quiz.png)
+<img width="1888" height="874" alt="image" src="https://github.com/user-attachments/assets/34f65855-7824-4d70-9472-00be539f8792" />
+
 
 ### 🗓️ Personalized Revision
 
-![Revision Planner](./docs/revision.png)
+<img width="1905" height="871" alt="image" src="https://github.com/user-attachments/assets/413cfcdd-360d-48c4-9e15-2a316dea0149" />
+
 
 ---
 
