@@ -1,4 +1,4 @@
-# 🎓 Academic Buddy
+# 🎓 Academic Chatbot
 
 ### AI-Powered Learning Assistant for Smarter Exam Preparation
 
